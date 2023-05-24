@@ -25,15 +25,16 @@ def predict(img_title_paths):
         - img_title_paths (dict): diccionario con el titulo de la imagen (key) y el path (value)
     '''
     # Cargar el modelo
-    modelo = Network(48, 7)
-    modelo.load_model("modelo_1.pt")
+    modelo = Network(1, 7)
+    modelo.load_model("Pesos_net.pth")
     for path in img_title_paths:
         # Cargar la imagen
         # np.ndarray, torch.Tensor
         im_file = (file_path / path).as_posix()
         original, transformed, denormalized = load_img(im_file)
 
-        # Inferencia
+        # 
+        transformed = transformed.to(modelo.device)
         logits, proba = modelo.predict(transformed)
         pred = torch.argmax(proba, -1).item()
         pred_label = EMOTIONS_MAP[pred]
