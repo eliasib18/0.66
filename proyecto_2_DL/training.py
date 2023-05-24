@@ -29,6 +29,7 @@ def validation_step(val_loader, net, cost_function):
         batch_imgs = batch['transformed']
         batch_labels = batch['label']
         device = net.device
+        batch_imgs = batch_imgs.to(device)
         batch_labels = batch_labels.to(device)
         with torch.inference_mode():
             # TODO: realiza un forward pass, calcula el loss y acumula el costo
@@ -36,9 +37,9 @@ def validation_step(val_loader, net, cost_function):
             loss = cost_function(logits, batch_labels)
             val_loss += loss.item()
 
-            val_loss /= len(val_loader)
     # TODO: Regresa el costo promedio por minibatch
-    return val_loader
+    val_loss /= len(val_loader)
+    return val_loss
 
 def train():
     # Hyperparametros
@@ -81,7 +82,7 @@ def train():
             batch_labels = batch_labels.to(device)
 
             optimizer.zero_grad()
-            logits, _ = modelo.predict(batch_imgs)
+            logits, _ = modelo.forward(batch_imgs)
             loss = criterion(logits,batch_labels)
             loss.backward()
             optimizer.step()

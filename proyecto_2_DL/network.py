@@ -15,10 +15,10 @@ class Network(nn.Module):
         out_dim = 7
 
         # TODO: Define las capas de tu red
-        self.conv1 = nn.Conv2d(input_dim, 6, 3)
+        self.conv1 = nn.Conv2d(input_dim, 8, 3)
         self.pool = nn.MaxPool2d(2,2)
-        self.conv2 = nn.Conv2d(6, 16, 3)
-        self.fc1 = nn.Linear(16 * 6 * 6, n_classes)
+        self.conv2 = nn.Conv2d(8, 4, 3)
+        self.fc1 = nn.Linear(400, n_classes)
         self.to(self.device)
  
     def calc_out_dim(self, in_dim, kernel_size, stride=1, padding=0):
@@ -35,7 +35,7 @@ class Network(nn.Module):
         x = self.pool(x)
 
         # Flatten
-        x = x.view(-1, 16 * 6 * 6)
+        x = x.view(-1, 400)
         logits = self.fc1(x)
         proba = F.softmax(logits)
         return logits, proba
