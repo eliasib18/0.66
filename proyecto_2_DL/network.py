@@ -16,9 +16,9 @@ class Network(nn.Module):
 
         # TODO: Define las capas de tu red
         self.conv1 = nn.Conv2d(input_dim, 6, 3)
-        self.pool = nn.MaxPool2d(2,2),
-        self.conv2 = nn.Conv2d(6, 16, 3),
-        self.fc1 = nn.Linear(16 * 6 * 6, n_classes),
+        self.pool = nn.MaxPool2d(2,2)
+        self.conv2 = nn.Conv2d(6, 16, 3)
+        self.fc1 = nn.Linear(16 * 6 * 6, n_classes)
         self.to(self.device)
  
     def calc_out_dim(self, in_dim, kernel_size, stride=1, padding=0):
@@ -37,7 +37,7 @@ class Network(nn.Module):
         # Flatten
         x = x.view(-1, 16 * 6 * 6)
         logits = self.fc1(x)
-        proba = self.fc1(logits)
+        proba = F.softmax(logits)
         return logits, proba
 
     def predict(self, x):
@@ -53,8 +53,7 @@ class Network(nn.Module):
         '''
         models_path = file_path / 'models' / model_name
         # TODO: Guarda los pesos de tu red neuronal en el path especificado
-        weights_path = models_path / 'pesos_net.pth'
-        torch.save(self.state_dict(),weights_path)
+        torch.save(self.state_dict(),models_path)
 
     def load_model(self, model_name: str):
         '''
@@ -64,6 +63,5 @@ class Network(nn.Module):
         '''
         models_path = file_path / 'models' / model_name
         # TODO: Carga los pesos de tu red neuronal
-        weights_path = models_path / 'pesos_net.pth'
-        self.load_state_dict(torch.load(weights_path))
+        self.load_state_dict(torch.load(models_path))
         

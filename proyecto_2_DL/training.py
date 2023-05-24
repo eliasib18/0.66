@@ -59,8 +59,9 @@ def train():
 
     plotter = PlotLosses()
     # Instanciamos tu red
-    modelo = Network(input_dim = 48,
+    modelo = Network(input_dim = 1,
                      n_classes = 7)
+    modelo.save_model('Pesos_net.pth')
 
     # TODO: Define la funcion de costo
     criterion = nn.CrossEntropyLoss()
