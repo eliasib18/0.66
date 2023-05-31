@@ -22,7 +22,6 @@ class PlotValues():
         plt.ylabel('Reward')
         plt.legend()
         plt.show(block=False)
-        plt.pause(5)
 
     def on_train_end(self, title):
         plt.show()

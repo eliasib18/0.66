@@ -55,7 +55,7 @@ action_size = 3
 plotter = PlotValues()
 
 # Hyperparameters
-total_epochs = 100
+total_epochs = 150
 max_timesteps = 1000
 gamma = 0.99
 epsilon = 1.0
