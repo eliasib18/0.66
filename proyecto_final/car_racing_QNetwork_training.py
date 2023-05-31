@@ -118,8 +118,8 @@ for epoch in range(total_epochs):
 # Closing Environment
 env.close()
 
-# Image save
-# plotter.on_train_end("reward_&_epsilon")
-
 # Optimized moodel
 q_network.save_model("best_model.pth")
+
+# Image save
+plotter.on_train_end("reward_&_epsilon")
