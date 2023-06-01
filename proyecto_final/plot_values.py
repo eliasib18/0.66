@@ -18,7 +18,7 @@ class PlotValues():
         self.i += 1
         plt.cla()
         plt.plot(self.x, self.values, label="Reward")
-        plt.xlabel('epochs')
+        plt.xlabel('Episodes')
         plt.ylabel('Reward')
         plt.legend()
         plt.show(block=False)
