@@ -6,8 +6,6 @@ import torch.optim as optim
 import pathlib
 from plot_values import PlotValues
 
-file_path = pathlib.Path(__file__).parent.absolute()
-
 # File path
 file_path = pathlib.Path(__file__).parent.absolute()
 
@@ -38,7 +36,7 @@ class QNetwork(nn.Module):
         self.load_state_dict(torch.load(models_path))
 
 # Initializing the environment
-render_mode = "human"
+render_mode = "rgb_array"
     # "human"
     # "rgb_array"
 env = gym.make('CarRacing-v2', render_mode=render_mode, continuous=False)
@@ -55,7 +53,7 @@ plotter = PlotValues()
 
 # Hyperparameters
 total_epochs = 1000
-max_timesteps = 1000
+max_timesteps = 2000
 gamma = 0.99
 epsilon = 1.0
 epsilon_decay = 0.995
@@ -120,7 +118,7 @@ for epoch in range(total_epochs):
 env.close()
 
 # Optimized moodel
-q_network.save_model("best_model.pth")
+q_network.save_model("best_model_500.pth")
 
 # Image save
 plotter.on_train_end("reward_&_epsilon")
