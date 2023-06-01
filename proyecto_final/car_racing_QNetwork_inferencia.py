@@ -39,38 +39,40 @@ file_path = pathlib.Path(__file__).parent.absolute()
 render_mode = "human"
 env = gym.make('CarRacing-v2', render_mode=render_mode, continuous=False)
 q_network = QNetwork(5)
-q_network.load_model('best_model_500.pth')
+q_network.load_model('best_model_1000.pth')
 
 # Graphic plotter and storing values
 plotter = PlotValues()
 
-def run(run_time):
-    state = env.reset()[0]
-    race_reward = 0
+def run(simulations, simulation_time):
+    for sim in range(simulations):
+        state = env.reset()[0]
+        race_reward = 0
 
-    for t in range(run_time*50):
-        if render_mode == "human":
-            env.render()
+        for t in range(simulation_time*50):
+            if render_mode == "human":
+                env.render()
+            
+            # State preprocess
+            state_tensor = torch.FloatTensor(state).permute(2, 0, 1).unsqueeze(0) / 255.0
+            
+            # Action
+            action = torch.argmax(q_network(state_tensor)).numpy()
+                    
+            # Environment action
+            next_state, reward, done, truncated, info = env.step(action)
+            
+            race_reward += reward
+            state = next_state
+            
+            if done or t == simulation_time*50 - 1:
+                print('Total Race Reward:', race_reward)
+                break
         
-        # State preprocess
-        state_tensor = torch.FloatTensor(state).permute(2, 0, 1).unsqueeze(0) / 255.0
-        
-        # Action
-        action = torch.argmax(q_network(state_tensor)).numpy()
-                
-        # Environment action
-        next_state, reward, done, truncated, info = env.step(action)
-        
-        race_reward += reward
-        state = next_state
-        
-        if done or t == run_time*50 - 1:
-            print('Total Race Reward:', race_reward)
-            break
-    
     # Ending the environment
     env.close()
 
 if __name__=="__main__":
-    simulation_time = 25 # seconds
-    run(simulation_time)
+    simulations = 3 # runs
+    simulation_time = 40 # seconds
+    run(simulations, simulation_time)
